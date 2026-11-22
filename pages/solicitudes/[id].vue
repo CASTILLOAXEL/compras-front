@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import type { Orden } from '@/types/orden'
 import type { Solicitud } from '@/types/solicitud'
+import DialogoGenerarOrden from '@/components/ordenes/DialogoGenerarOrden.vue'
 import HistorialSolicitud from '@/components/solicitudes/HistorialSolicitud.vue'
 import TablaItems from '@/components/solicitudes/TablaItems.vue'
 
@@ -27,6 +29,7 @@ const cargarSolicitud = async () => {
 
 const esBorrador = computed(() => solicitud.value?.estado_solicitud_id === ESTADOS_SOLICITUD.BORRADOR)
 const estaEnAprobacion = computed(() => solicitud.value?.estado_solicitud_id === ESTADOS_SOLICITUD.EN_APROBACION)
+const estaAprobada = computed(() => solicitud.value?.estado_solicitud_id === ESTADOS_SOLICITUD.APROBADA) // NUEVO
 
 const procesando = ref(false)
 
@@ -91,6 +94,13 @@ const confirmarDecision = async () => {
   }
 }
 
+// generar la orden de compra y abrir su detalle
+const mostrarDialogoOrden = ref(false)
+
+const alGenerarOrden = async (orden: Orden) => {
+  await navigateTo(`/ordenes/${orden.id}`)
+}
+
 onMounted(cargarSolicitud)
 </script>
 
@@ -144,6 +154,26 @@ onMounted(cargarSolicitud)
               Aprobar
             </VBtn>
           </template>
+
+          <!-- la solicitud aprobada genera su orden de compra -->
+          <VBtn
+            v-if="estaAprobada && $can('generar ordenes', 'Orden')"
+            color="success"
+            prepend-icon="tabler-file-dollar"
+            @click="mostrarDialogoOrden = true"
+          >
+            Generar orden de compra
+          </VBtn>
+
+          <!-- enlace a la orden ya generada -->
+          <VBtn
+            v-if="solicitud.orden && $can('ver ordenes', 'Orden')"
+            variant="tonal"
+            prepend-icon="tabler-file-invoice"
+            :to="`/ordenes/${solicitud.orden.id}`"
+          >
+            Ver orden {{ solicitud.orden.numero }}
+          </VBtn>
         </div>
       </div>
 
@@ -260,6 +290,11 @@ onMounted(cargarSolicitud)
           </VCardText>
         </VCard>
       </VDialog>
+      <DialogoGenerarOrden
+        v-model="mostrarDialogoOrden"
+        :solicitud="solicitud"
+        @generada="alGenerarOrden"
+      />
     </template>
 
     <VCard

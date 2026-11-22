@@ -9,19 +9,43 @@ export default [
 
   { heading: 'Compras' },
   {
+    title: 'Solicitudes',
+    to: { name: 'solicitudes' },
+    icon: { icon: 'tabler-file-invoice' },
+    action: 'ver solicitudes',
+    subject: 'Solicitud',
+  },
+  {
+    title: 'Órdenes de compra',
+    to: { name: 'ordenes' },
+    icon: { icon: 'tabler-file-dollar' },
+    action: 'ver ordenes',
+    subject: 'Orden',
+  },
+
+  { heading: 'Proveedores' },
+  {
     title: 'Proveedores',
     to: { name: 'proveedores' },
     icon: { icon: 'tabler-building-store' },
     action: 'ver proveedores',
     subject: 'Proveedor',
   },
-
   {
-    title: 'Solicitudes',
-    to: { name: 'solicitudes' },
-    icon: { icon: 'tabler-file-invoice' },
-    action: 'ver solicitudes',
-    subject: 'Solicitud',
+    title: 'Contratos',
+    to: { name: 'contratos' },
+    icon: { icon: 'tabler-file-certificate' },
+    action: 'ver contratos',
+    subject: 'Contrato',
+  },
+
+  { heading: 'Reportes' },
+  {
+    title: 'Órdenes por proveedor',
+    to: { name: 'reportes-ordenes' },
+    icon: { icon: 'tabler-report-analytics' },
+    action: 'ver ordenes',
+    subject: 'Orden',
   },
 
   { heading: 'Catálogos' },

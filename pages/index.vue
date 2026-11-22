@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import IndicadoresInicio from '@/components/inicio/IndicadoresInicio.vue'
+
 interface UsuarioSesion {
   primer_nombre: string
   roles: string[]
@@ -46,6 +48,7 @@ const usuario = useSanctumUser<UsuarioSesion>()
       >
     </div>
   </VCard>
+  <IndicadoresInicio class="mt-6" />
 </template>
 
 <style lang="scss" scoped>

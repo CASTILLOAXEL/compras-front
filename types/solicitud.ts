@@ -53,6 +53,14 @@ export interface SolicitudHistorial {
   usuario?: UsuarioResumen
 }
 
+// orden de compra generada desde la solicitud
+export interface OrdenResumen {
+  id: number
+  numero: string
+  estado_orden_id: number
+  estado_orden?: { id: number; nombre: string }
+}
+
 export interface Solicitud {
   id: number
   numero: string
@@ -66,6 +74,7 @@ export interface Solicitud {
   estado_solicitud?: EstadoSolicitudCatalogo
   detalles?: SolicitudDetalle[]
   historial?: SolicitudHistorial[]
+  orden?: OrdenResumen | null
 }
 
 export interface FormularioItem {

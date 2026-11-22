@@ -1,7 +1,4 @@
-
-const PATRON_ESTILO_VUETIFY = /^virtual:plugin-vuetify:([^?]+\.s[ac]ss)(\?.*)?$/
-
-// Sass necesita rutas con "/" también en Windows
+const PATRON_ESTILO_VUETIFY = /^virtual:plugin-vuetify:([^?]+\.s[ac]ss)(?:\?.*)?$/
 const normalizarRuta = (ruta: string) => ruta.replace(/\\/g, '/')
 
 export const estilosVuetifyWindows = (rutaArchivoConfiguracion: string, rutaLibreriaVuetify: string) => {
