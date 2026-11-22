@@ -1,175 +1,148 @@
 <script setup lang="ts">
-import AuthProvider from '@/views/pages/authentication/AuthProvider.vue'
-import { useGenerateImageVariant } from '@core/composable/useGenerateImageVariant'
-import authV2LoginIllustrationBorderedDark from '@images/pages/auth-v2-login-illustration-bordered-dark.png'
-import authV2LoginIllustrationBorderedLight from '@images/pages/auth-v2-login-illustration-bordered-light.png'
-import authV2LoginIllustrationDark from '@images/pages/auth-v2-login-illustration-dark.png'
-import authV2LoginIllustrationLight from '@images/pages/auth-v2-login-illustration-light.png'
-import authV2MaskDark from '@images/pages/misc-mask-dark.png'
-import authV2MaskLight from '@images/pages/misc-mask-light.png'
-import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
-import { themeConfig } from '@themeConfig'
+import { VForm } from 'vuetify/components/VForm'
 
+// Página de invitado (si ya hay sesión, redirige al inicio) y sin menú
 definePageMeta({
   layout: 'blank',
-  public: true,
-
+  sanctum: { guestOnly: true },
 })
 
-const form = ref({
-  email: '',
-  password: '',
-  remember: false,
-})
+useHead({ title: 'Iniciar sesión' })
 
-const isPasswordVisible = ref(false)
+const { login } = useSanctumAuth()
 
-const authThemeImg = useGenerateImageVariant(
-  authV2LoginIllustrationLight,
-  authV2LoginIllustrationDark,
-  authV2LoginIllustrationBorderedLight,
-  authV2LoginIllustrationBorderedDark,
-  true)
+const refFormulario = ref<VForm>()
+const formulario = ref({ correo: '', password: '' })
+const mostrarPassword = ref(false)
+const cargando = ref(false)
+const mensajeError = ref('')
 
-const authThemeMask = useGenerateImageVariant(authV2MaskLight, authV2MaskDark)
+const reglaObligatoria = (valor: string) => !!valor || 'Este campo es obligatorio.'
+const reglaCorreo = (valor: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valor) || 'Ingrese un correo válido.'
+
+const iniciarSesion = async () => {
+  const { valid: esValido } = await refFormulario.value!.validate()
+
+  if (!esValido)
+    return
+
+  cargando.value = true
+  mensajeError.value = ''
+
+  try {
+    // Envía { correo, password } a POST api/auth/login; el módulo guarda el token y redirige
+    await login(formulario.value)
+  }
+  catch (error: any) {
+    mensajeError.value = error?.data?.message ?? 'No se pudo iniciar sesión, intente de nuevo.'
+  }
+  finally {
+    cargando.value = false
+  }
+}
 </script>
 
 <template>
-  <a href="javascript:void(0)">
-    <div class="auth-logo d-flex align-center gap-x-3">
-      <VNodeRenderer :nodes="themeConfig.app.logo" />
-      <h1 class="auth-title">
-        {{ themeConfig.app.title }}
-      </h1>
-    </div>
-  </a>
-
   <VRow
     no-gutters
     class="auth-wrapper bg-surface"
   >
+    <!-- Panel institucional siempre claro (los logos están hechos para fondo blanco) -->
     <VCol
-      md="8"
+      md="7"
+      lg="8"
       class="d-none d-md-flex"
     >
-      <div class="position-relative bg-background w-100 me-0">
-        <div
-          class="d-flex align-center justify-center w-100 h-100"
-          style="padding-inline: 6.25rem;"
-        >
-          <VImg
-            max-width="613"
-            :src="authThemeImg"
-            class="auth-illustration mt-16 mb-2"
-          />
-        </div>
-
+      <div class="panel-institucional w-100 ma-6 d-flex flex-column align-center justify-center text-center">
         <img
-          class="auth-footer-mask flip-in-rtl"
-          :src="authThemeMask"
-          alt="auth-footer-mask"
-          height="280"
-          width="100"
+          src="/images/guayacan/logo-60-aniversario.png"
+          alt="60 aniversario de Guayacán"
+          class="panel-institucional__logo mb-6"
         >
+        <h4 class="text-h4 panel-institucional__titulo mb-2">
+          Sistema de Compras y Contrataciones
+        </h4>
+        <p class="text-body-1 panel-institucional__texto mb-0">
+          Solicitudes, proveedores y aprobaciones en un solo lugar.
+        </p>
       </div>
     </VCol>
 
+    <!-- Formulario -->
     <VCol
       cols="12"
-      md="4"
+      md="5"
+      lg="4"
       class="auth-card-v2 d-flex align-center justify-center"
     >
       <VCard
         flat
-        :max-width="500"
-        class="mt-12 mt-sm-0 pa-6"
+        :max-width="440"
+        class="mt-12 mt-sm-0 pa-4 w-100"
       >
-        <VCardText>
+        <VCardText class="text-center">
+          <!-- Logo institucional en SVG -->
+          <img
+            src="/guayacan_logo.svg"
+            alt="Cooperativa Guayacán"
+            class="logo-formulario mb-8"
+          >
           <h4 class="text-h4 mb-1">
-            Welcome to <span class="text-capitalize">{{ themeConfig.app.title }}</span>! 👋🏻
+            ¡Bienvenido!
           </h4>
           <p class="mb-0">
-            Please sign-in to your account and start the adventure
+            Inicie sesión con su correo y contraseña.
           </p>
         </VCardText>
+
         <VCardText>
-          <VForm @submit.prevent="() => {}">
+          <VAlert
+            v-if="mensajeError"
+            type="error"
+            variant="tonal"
+            class="mb-6"
+          >
+            {{ mensajeError }}
+          </VAlert>
+
+          <VForm
+            ref="refFormulario"
+            @submit.prevent="iniciarSesion"
+          >
             <VRow>
-              <!-- email -->
               <VCol cols="12">
                 <AppTextField
-                  v-model="form.email"
-                  autofocus
-                  label="Email or Username"
+                  v-model="formulario.correo"
+                  label="Correo"
                   type="email"
-                  placeholder="johndoe@email.com"
+                  placeholder="usuario@compras.test"
+                  autofocus
+                  :rules="[reglaObligatoria, reglaCorreo]"
                 />
               </VCol>
 
-              <!-- password -->
               <VCol cols="12">
                 <AppTextField
-                  v-model="form.password"
-                  label="Password"
+                  v-model="formulario.password"
+                  label="Contraseña"
                   placeholder="············"
-                  :type="isPasswordVisible ? 'text' : 'password'"
-                  autocomplete="password"
-                  :append-inner-icon="isPasswordVisible ? 'tabler-eye-off' : 'tabler-eye'"
-                  @click:append-inner="isPasswordVisible = !isPasswordVisible"
+                  autocomplete="current-password"
+                  :type="mostrarPassword ? 'text' : 'password'"
+                  :append-inner-icon="mostrarPassword ? 'tabler-eye-off' : 'tabler-eye'"
+                  :rules="[reglaObligatoria]"
+                  @click:append-inner="mostrarPassword = !mostrarPassword"
                 />
+              </VCol>
 
-                <div class="d-flex align-center flex-wrap justify-space-between my-6">
-                  <VCheckbox
-                    v-model="form.remember"
-                    label="Remember me"
-                  />
-                  <a
-                    class="text-primary"
-                    href="javascript:void(0)"
-                  >
-                    Forgot Password?
-                  </a>
-                </div>
-
+              <VCol cols="12">
                 <VBtn
                   block
+                  size="large"
                   type="submit"
+                  :loading="cargando"
                 >
-                  Login
+                  Iniciar sesión
                 </VBtn>
-              </VCol>
-
-              <!-- create account -->
-              <VCol
-                cols="12"
-                class="text-body-1 text-center"
-              >
-                <span class="d-inline-block">
-                  New on our platform?
-                </span>
-                <a
-                  class="text-primary ms-1 d-inline-block text-body-1"
-                  href="javascript:void(0)"
-                >
-                  Create an account
-                </a>
-              </VCol>
-
-              <VCol
-                cols="12"
-                class="d-flex align-center"
-              >
-                <VDivider />
-                <span class="mx-4">or</span>
-                <VDivider />
-              </VCol>
-
-              <!-- auth providers -->
-              <VCol
-                cols="12"
-                class="text-center"
-              >
-                <AuthProvider />
               </VCol>
             </VRow>
           </VForm>
@@ -181,4 +154,31 @@ const authThemeMask = useGenerateImageVariant(authV2MaskLight, authV2MaskDark)
 
 <style lang="scss">
 @use "@core/scss/template/pages/page-auth";
+
+// Panel siempre claro, con un degradado suave en verde y azul de Guayacán
+.panel-institucional {
+  border-radius: 24px;
+  background: linear-gradient(160deg, #eef7ec 0%, #fff 55%, #e8edf8 100%);
+  padding-block: 48px;
+  padding-inline: 48px;
+
+  &__logo {
+    inline-size: 260px;
+  }
+
+  &__titulo {
+    color: #1b2a5c;
+    font-weight: 600;
+  }
+
+  &__texto {
+    color: #4b5675;
+  }
+}
+
+.logo-formulario {
+  display: block;
+  inline-size: 190px;
+  margin-inline: auto;
+}
 </style>

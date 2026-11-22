@@ -50,7 +50,7 @@ export default defineNuxtConfig({
     }],
   },
 
-  plugins: ['@/plugins/vuetify/index.ts', '@/plugins/iconify/index.ts'],
+  plugins: ['@/plugins/vuetify/index.ts', '@/plugins/iconify/index.ts', '@/plugins/casl/index.ts'],
 
   imports: {
     dirs: ['./@core/utils', './@core/composable/', './plugins/*/composables/*'],
@@ -85,8 +85,6 @@ export default defineNuxtConfig({
     server: false,
     client: false,
   },
-
-
   alias: {
     '@': fileURLToPath(new URL('.', import.meta.url)),
     '@themeConfig': fileURLToPath(new URL('./themeConfig.ts', import.meta.url)),
@@ -144,6 +142,30 @@ export default defineNuxtConfig({
     transpile: ['vuetify'],
   },
 
+  sanctum: {
+    mode: 'token',
+    baseUrl: '/services',
+    redirectIfAuthenticated: true,
+    redirectIfUnauthenticated: true,
+    endpoints: {
+      login: '/api/auth/login',
+      logout: '/api/auth/logout',
+      user: '/api/user',
+    },
+    redirect: {
+      keepRequestedRoute: false,
+      onLogin: '/',
+      onLogout: '/login',
+      onAuthOnly: '/login',
+      onGuestOnly: '/',
+    },
+    globalMiddleware: {
+      enabled: true,
+    },
+    logLevel: 3,
+  },
+
   compatibilityDate: '2025-07-15',
-  modules: ['@vueuse/nuxt', '@nuxtjs/i18n', '@nuxtjs/device', '@pinia/nuxt'],
+  modules: ['@vueuse/nuxt', '@nuxtjs/i18n', '@nuxtjs/device', '@pinia/nuxt', 'nuxt-auth-sanctum'],
+
 })

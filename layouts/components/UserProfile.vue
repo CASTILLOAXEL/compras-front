@@ -1,5 +1,27 @@
 <script setup lang="ts">
-import avatar1 from '@images/avatars/avatar-1.png'
+interface UsuarioSesion {
+  nombre_completo: string
+  correo: string
+  roles: string[]
+}
+
+const { logout } = useSanctumAuth()
+const usuario = useSanctumUser<UsuarioSesion>()
+
+// "Administrador Sistema" -> "AS"
+const iniciales = computed(() => (usuario.value?.nombre_completo ?? '')
+  .split(' ')
+  .filter(Boolean)
+  .slice(0, 2)
+  .map(palabra => palabra[0])
+  .join(''))
+
+const rolPrincipal = computed(() => usuario.value?.roles?.[0] ?? '')
+
+const cerrarSesion = async () => {
+  // POST api/auth/logout: elimina el token en el back y redirige al login
+  await logout()
+}
 </script>
 
 <template>
@@ -16,102 +38,35 @@ import avatar1 from '@images/avatars/avatar-1.png'
       color="primary"
       variant="tonal"
     >
-      <VImg :src="avatar1" />
+      <span class="text-body-1 font-weight-medium">{{ iniciales }}</span>
 
-      <!-- SECTION Menu -->
       <VMenu
         activator="parent"
-        width="230"
+        width="240"
         location="bottom end"
-        offset="14px"
+        offset="12px"
       >
         <VList>
-          <!-- 👉 User Avatar & Name -->
           <VListItem>
             <template #prepend>
-              <VListItemAction start>
-                <VBadge
-                  dot
-                  location="bottom right"
-                  offset-x="3"
-                  offset-y="3"
-                  color="success"
-                >
-                  <VAvatar
-                    color="primary"
-                    variant="tonal"
-                  >
-                    <VImg :src="avatar1" />
-                  </VAvatar>
-                </VBadge>
-              </VListItemAction>
+              <VAvatar
+                color="primary"
+                variant="tonal"
+                class="me-3"
+              >
+                <span class="text-body-1 font-weight-medium">{{ iniciales }}</span>
+              </VAvatar>
             </template>
 
             <VListItemTitle class="font-weight-semibold">
-              John Doe
+              {{ usuario?.nombre_completo }}
             </VListItemTitle>
-            <VListItemSubtitle>Admin</VListItemSubtitle>
+            <VListItemSubtitle>{{ rolPrincipal }}</VListItemSubtitle>
           </VListItem>
 
           <VDivider class="my-2" />
 
-          <!-- 👉 Profile -->
-          <VListItem link>
-            <template #prepend>
-              <VIcon
-                class="me-2"
-                icon="tabler-user"
-                size="22"
-              />
-            </template>
-
-            <VListItemTitle>Profile</VListItemTitle>
-          </VListItem>
-
-          <!-- 👉 Settings -->
-          <VListItem link>
-            <template #prepend>
-              <VIcon
-                class="me-2"
-                icon="tabler-settings"
-                size="22"
-              />
-            </template>
-
-            <VListItemTitle>Settings</VListItemTitle>
-          </VListItem>
-
-          <!-- 👉 Pricing -->
-          <VListItem link>
-            <template #prepend>
-              <VIcon
-                class="me-2"
-                icon="tabler-currency-dollar"
-                size="22"
-              />
-            </template>
-
-            <VListItemTitle>Pricing</VListItemTitle>
-          </VListItem>
-
-          <!-- 👉 FAQ -->
-          <VListItem link>
-            <template #prepend>
-              <VIcon
-                class="me-2"
-                icon="tabler-help"
-                size="22"
-              />
-            </template>
-
-            <VListItemTitle>FAQ</VListItemTitle>
-          </VListItem>
-
-          <!-- Divider -->
-          <VDivider class="my-2" />
-
-          <!-- 👉 Logout -->
-          <VListItem to="/login">
+          <VListItem @click="cerrarSesion">
             <template #prepend>
               <VIcon
                 class="me-2"
@@ -120,11 +75,10 @@ import avatar1 from '@images/avatars/avatar-1.png'
               />
             </template>
 
-            <VListItemTitle>Logout</VListItemTitle>
+            <VListItemTitle>Cerrar sesión</VListItemTitle>
           </VListItem>
         </VList>
       </VMenu>
-      <!-- !SECTION -->
     </VAvatar>
   </VBadge>
 </template>
