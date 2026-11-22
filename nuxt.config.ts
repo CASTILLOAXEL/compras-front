@@ -1,6 +1,7 @@
 import { fileURLToPath } from 'node:url'
 import svgLoader from 'vite-svg-loader'
 import vuetify from 'vite-plugin-vuetify'
+import { estilosVuetifyWindows } from './vite-plugins/estilosVuetify'
 
 const urlApi = process.env.NUXT_API_URL || 'http://compras-back.local'
 
@@ -130,6 +131,11 @@ export default defineNuxtConfig({
 
     plugins: [
       svgLoader(),
+      estilosVuetifyWindows(
+        fileURLToPath(new URL('./assets/styles/variables/_vuetify.scss', import.meta.url)),
+        fileURLToPath(new URL('./node_modules/vuetify/lib', import.meta.url)),
+      ),
+
       vuetify({
         styles: {
           configFile: 'assets/styles/variables/_vuetify.scss',

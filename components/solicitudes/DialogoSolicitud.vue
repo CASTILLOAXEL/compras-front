@@ -24,7 +24,7 @@ const guardando = ref(false)
 const esEdicion = computed(() => props.solicitud !== null)
 
 // Cada vez que se abre, toma el centro de costo de la solicitud (o vacío si es nueva)
-watch(visible, (estaAbierto) => {
+watch(visible, estaAbierto => {
   if (!estaAbierto)
     return
 

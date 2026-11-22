@@ -2,6 +2,7 @@ import { deepMerge } from '@antfu/utils'
 import { createVuetify } from 'vuetify'
 import { VBtn } from 'vuetify/components/VBtn'
 import { VVideo } from 'vuetify/labs/VVideo'
+import { en, es } from 'vuetify/locale'
 import defaults from './defaults'
 import { icons } from './icons'
 import { staticPrimaryColor, staticPrimaryDarkenColor, themes } from './theme'
@@ -11,8 +12,6 @@ import { themeConfig } from '@themeConfig'
 import { cookieRef } from '@/@layouts/stores/config'
 import '@core/scss/template/libs/vuetify/index.scss'
 import 'vuetify/styles'
-
-import { en,  es } from 'vuetify/locale'
 
 export default defineNuxtPlugin(nuxtApp => {
   const cookieThemeValues = {

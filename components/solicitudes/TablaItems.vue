@@ -232,96 +232,96 @@ onMounted(cargarCatalogosItems)
 
     <VTable class="text-no-wrap">
       <thead>
-      <tr>
-        <th>Producto</th>
-        <th>Unidad</th>
-        <th class="text-end">
-          Cantidad
-        </th>
-        <th class="text-end">
-          Precio estimado
-        </th>
-        <th class="text-end">
-          Subtotal
-        </th>
-        <th
-          v-if="esBorrador"
-          class="text-center"
-        >
-          Acciones
-        </th>
-      </tr>
+        <tr>
+          <th>Producto</th>
+          <th>Unidad</th>
+          <th class="text-end">
+            Cantidad
+          </th>
+          <th class="text-end">
+            Precio estimado
+          </th>
+          <th class="text-end">
+            Subtotal
+          </th>
+          <th
+            v-if="esBorrador"
+            class="text-center"
+          >
+            Acciones
+          </th>
+        </tr>
       </thead>
 
       <tbody>
-      <tr
-        v-for="detalle in detalles"
-        :key="detalle.id"
-      >
-        <td class="font-weight-medium text-high-emphasis">
-          {{ detalle.producto?.nombre }}
-        </td>
-        <td>{{ detalle.unidad_medida?.abreviatura }}</td>
-        <td class="text-end">
-          {{ Number(detalle.cantidad).toLocaleString('es-GT') }}
-        </td>
-        <td class="text-end">
-          {{ formatoQuetzales(Number(detalle.precio_estimado)) }}
-        </td>
-        <td class="text-end">
-          {{ formatoQuetzales(subtotalItem(detalle)) }}
-        </td>
-        <td
-          v-if="esBorrador"
-          class="text-center"
+        <tr
+          v-for="detalle in detalles"
+          :key="detalle.id"
         >
-          <IconBtn
-            v-if="$can('editar solicitud detalles', 'SolicitudDetalle')"
-            @click="editarItem(detalle)"
+          <td class="font-weight-medium text-high-emphasis">
+            {{ detalle.producto?.nombre }}
+          </td>
+          <td>{{ detalle.unidad_medida?.abreviatura }}</td>
+          <td class="text-end">
+            {{ Number(detalle.cantidad).toLocaleString('es-GT') }}
+          </td>
+          <td class="text-end">
+            {{ formatoQuetzales(Number(detalle.precio_estimado)) }}
+          </td>
+          <td class="text-end">
+            {{ formatoQuetzales(subtotalItem(detalle)) }}
+          </td>
+          <td
+            v-if="esBorrador"
+            class="text-center"
           >
-            <VIcon icon="tabler-pencil" />
-            <VTooltip activator="parent">
-              Editar
-            </VTooltip>
-          </IconBtn>
-          <IconBtn
-            v-if="$can('eliminar solicitud detalles', 'SolicitudDetalle')"
-            @click="confirmarEliminacion(detalle)"
-          >
-            <VIcon
-              icon="tabler-trash"
-              color="error"
-            />
-            <VTooltip activator="parent">
-              Quitar
-            </VTooltip>
-          </IconBtn>
-        </td>
-      </tr>
+            <IconBtn
+              v-if="$can('editar solicitud detalles', 'SolicitudDetalle')"
+              @click="editarItem(detalle)"
+            >
+              <VIcon icon="tabler-pencil" />
+              <VTooltip activator="parent">
+                Editar
+              </VTooltip>
+            </IconBtn>
+            <IconBtn
+              v-if="$can('eliminar solicitud detalles', 'SolicitudDetalle')"
+              @click="confirmarEliminacion(detalle)"
+            >
+              <VIcon
+                icon="tabler-trash"
+                color="error"
+              />
+              <VTooltip activator="parent">
+                Quitar
+              </VTooltip>
+            </IconBtn>
+          </td>
+        </tr>
 
-      <tr v-if="!detalles.length">
-        <td
-          colspan="6"
-          class="text-center py-6"
-        >
-          Aún no hay ítems. Agregue el primero con el formulario de arriba.
-        </td>
-      </tr>
+        <tr v-if="!detalles.length">
+          <td
+            colspan="6"
+            class="text-center py-6"
+          >
+            Aún no hay ítems. Agregue el primero con el formulario de arriba.
+          </td>
+        </tr>
       </tbody>
 
       <tfoot>
-      <tr>
-        <td
-          colspan="4"
-          class="text-end font-weight-medium"
-        >
-          Total estimado
-        </td>
-        <td class="text-end text-h6 text-primary">
-          {{ formatoQuetzales(totalEstimado) }}
-        </td>
-        <td v-if="esBorrador" />
-      </tr>
+        <tr>
+          <td
+            colspan="4"
+            class="text-end font-weight-medium"
+          >
+            Total estimado
+          </td>
+          <td class="text-end text-h6 text-primary">
+            {{ formatoQuetzales(totalEstimado) }}
+          </td>
+          <td v-if="esBorrador" />
+        </tr>
       </tfoot>
     </VTable>
 

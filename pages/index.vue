@@ -49,7 +49,6 @@ const usuario = useSanctumUser<UsuarioSesion>()
 </template>
 
 <style lang="scss" scoped>
-
 .tarjeta-bienvenida {
   background: linear-gradient(90deg,
     rgba(var(--v-theme-primary), 0.12) 0%,

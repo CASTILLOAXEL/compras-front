@@ -18,7 +18,7 @@ const cargando = ref(false)
 const mensajeError = ref('')
 
 const reglaObligatoria = (valor: string) => !!valor || 'Este campo es obligatorio.'
-const reglaCorreo = (valor: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valor) || 'Ingrese un correo válido.'
+const reglaCorreo = (valor: string) => /^[^\s@]+@[^\s@][^\s.@]*\.[^\s@]+$/.test(valor) || 'Ingrese un correo válido.'
 
 const iniciarSesion = async () => {
   const { valid: esValido } = await refFormulario.value!.validate()
