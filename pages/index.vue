@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import IndicadoresInicio from '@/components/inicio/IndicadoresInicio.vue'
-
+import RecorridoMenu from '@/components/inicio/RecorridoMenu.vue'
 interface UsuarioSesion {
   primer_nombre: string
   roles: string[]
@@ -39,6 +39,7 @@ const usuario = useSanctumUser<UsuarioSesion>()
         >
           {{ rol }}
         </VChip>
+        <RecorridoMenu class="mt-4" />
       </VCardText>
 
       <img

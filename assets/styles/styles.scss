@@ -1,1 +1,63 @@
-// Write your overrides
+.driver-popover.recorrido-guayacan {
+  border-radius: 16px;
+  font-family: inherit;
+  max-inline-size: 560px;
+  min-inline-size: 460px;
+  padding: 24px;
+
+  .driver-popover-title {
+    color: #1f7a3a;
+    font-family: inherit;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-block-end: 8px;
+  }
+
+  .driver-popover-description {
+    font-family: inherit;
+    font-size: 1.05rem;
+    line-height: 1.6;
+  }
+
+  .driver-popover-progress-text {
+    font-size: 0.9rem;
+  }
+
+  .driver-popover-footer {
+    margin-block-start: 20px;
+
+    button {
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 0.95rem;
+      padding-block: 8px;
+      padding-inline: 18px;
+      text-shadow: none;
+    }
+  }
+
+  .driver-popover-next-btn {
+    border: none;
+    background-color: #1f7a3a;
+    color: #fff;
+  }
+
+  .driver-popover-close-btn {
+    font-size: 1.4rem;
+  }
+}
+
+.recorrido-mascota {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+
+  img {
+    flex-shrink: 0;
+    block-size: 140px;
+  }
+
+  p {
+    margin: 0;
+  }
+}

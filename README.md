@@ -1,33 +1,66 @@
-# vue
+# Sistema de Compras y Contrataciones — Front-end
 
-This template should help get you started developing with Vue 3 in Vite.
+Interfaz web del Caso B (Fase 4) de la Cooperativa Guayacán.
 
-## Recommended IDE Setup
+Consume la API del repositorio **compras-back**, que debe estar instalada y corriendo primero.
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+---
 
-## Type Support for `.vue` Imports in TS
+## Requisitos
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+| Herramienta | Versión |
+|---|---|
+| Node.js | 22 o superior (probado con 24) |
+| pnpm | 10 |
+| API compras-back | Corriendo en `http://compras-back.local` |
 
-## Customize configuration
+Instalar pnpm (una sola vez):
+```bash
+npm install -g pnpm
+```
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+---
 
-## Project Setup
+## Pasos de instalación
 
-```sh
+### 1. Clonar el proyecto
+En la terminal de Laragon (**Menú → Terminal**):
+```bash
+cd C:\laragon\www
+git clone https://github.com/CASTILLOAXEL/compras-front.git
+cd compras-front
+```
+
+### 2. Instalar las dependencias
+```bash
 pnpm install
 ```
 
-### Compile and Hot-Reload for Development
+### 3. Configurar el `.env`
+```bash
+copy .env.example .env
+```
 
-```sh
+Debe tener la dirección de la API:
+```env
+NUXT_API_URL=http://compras-back.local
+```
+
+### 4. Levantar el proyecto
+```bash
 pnpm dev
 ```
 
-### Type-Check, Compile and Minify for Production
-
-```sh
-pnpm build
+### 5. Abrir en el navegador
 ```
+http://localhost:3000
+```
+
+---
+
+## Usuarios de prueba
+
+| Rol | Correo | Contraseña |
+|---|---|---|
+| Super Administrador | `admin@compras.test` | `Gy202600` |
+| Solicitante | `solicitante@compras.test` | `Gy202600` |
