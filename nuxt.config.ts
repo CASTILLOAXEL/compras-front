@@ -2,19 +2,29 @@ import { fileURLToPath } from 'node:url'
 import svgLoader from 'vite-svg-loader'
 import vuetify from 'vite-plugin-vuetify'
 
+const urlApi = process.env.NUXT_API_URL || 'http://compras-back.local'
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  ssr: false,
+
   app: {
     head: {
-      titleTemplate: '%s - NuxtJS Admin Template',
-      title: 'Vuexy',
+      titleTemplate: '%s - Compras Guayacán',
+      title: 'Inicio',
+
+      htmlAttrs: { lang: 'es' },
 
       link: [{
         rel: 'icon',
-        type: 'image/x-icon',
-        href: `${process.env.NUXT_APP_BASE_URL}/favicon.ico`,
+        type: 'image/svg+xml',
+        href: '/guayacan_logo.svg',
       }],
     },
+  },
+
+  routeRules: {
+    '/services/**': { proxy: `${urlApi}/**` },
   },
 
   devtools: {
@@ -55,6 +65,7 @@ export default defineNuxtConfig({
   typescript: {
     tsConfig: {
       compilerOptions: {
+
         paths: {
           '@/*': ['../*'],
           '@themeConfig': ['../themeConfig.ts'],
@@ -65,18 +76,16 @@ export default defineNuxtConfig({
           '@images/*': ['../assets/images/*'],
           '@styles/*': ['../assets/styles/*'],
           '@validators': ['../@core/utils/validators'],
-          '@db/*': ['../server/fake-db/*'],
-          '@api-utils/*': ['../server/utils/*'],
         },
       },
     },
   },
 
-  // ℹ️ Disable source maps until this is resolved: https://github.com/vuetifyjs/vuetify-loader/issues/290
   sourcemap: {
     server: false,
     client: false,
   },
+
 
   alias: {
     '@': fileURLToPath(new URL('.', import.meta.url)),
@@ -86,9 +95,8 @@ export default defineNuxtConfig({
     '@images': fileURLToPath(new URL('./assets/images/', import.meta.url)),
     '@styles': fileURLToPath(new URL('./assets/styles/', import.meta.url)),
     '@configured-variables': fileURLToPath(new URL('./assets/styles/variables/_template.scss', import.meta.url)),
-    '@db': fileURLToPath(new URL('./server/fake-db/', import.meta.url)),
-    '@api-utils': fileURLToPath(new URL('./server/utils/', import.meta.url)),
   },
+
   vue: {
     compilerOptions: {
       isCustomElement: tag => tag === 'swiper-container' || tag === 'swiper-slide',
@@ -99,6 +107,7 @@ export default defineNuxtConfig({
     define: { 'process.env': {} },
 
     resolve: {
+
       alias: {
         '@': fileURLToPath(new URL('.', import.meta.url)),
         '@themeConfig': fileURLToPath(new URL('./themeConfig.ts', import.meta.url)),
@@ -107,8 +116,6 @@ export default defineNuxtConfig({
         '@images': fileURLToPath(new URL('./assets/images/', import.meta.url)),
         '@styles': fileURLToPath(new URL('./assets/styles/', import.meta.url)),
         '@configured-variables': fileURLToPath(new URL('./assets/styles/variables/_template.scss', import.meta.url)),
-        '@db': fileURLToPath(new URL('./server/fake-db/', import.meta.url)),
-        '@api-utils': fileURLToPath(new URL('./server/utils/', import.meta.url)),
       },
     },
 
