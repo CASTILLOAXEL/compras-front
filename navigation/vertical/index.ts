@@ -1,12 +1,19 @@
 export default [
   {
-    title: 'Home',
+    title: 'Inicio',
     to: { name: 'index' },
     icon: { icon: 'tabler-smart-home' },
+    action: 'home',
+    subject: 'home',
   },
+
+
+  { heading: 'Compras' },
   {
-    title: 'Second page',
-    to: { name: 'second-page' },
-    icon: { icon: 'tabler-file' },
+    title: 'Proveedores',
+    to: { name: 'proveedores' },
+    icon: { icon: 'tabler-building-store' },
+    action: 'ver proveedores',
+    subject: 'Proveedor',
   },
 ]

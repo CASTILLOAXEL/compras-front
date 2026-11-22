@@ -12,6 +12,8 @@ import { cookieRef } from '@/@layouts/stores/config'
 import '@core/scss/template/libs/vuetify/index.scss'
 import 'vuetify/styles'
 
+import { en,  es } from 'vuetify/locale'
+
 export default defineNuxtPlugin(nuxtApp => {
   const cookieThemeValues = {
     defaultTheme: resolveVuetifyTheme(themeConfig.app.theme),
@@ -44,6 +46,12 @@ export default defineNuxtPlugin(nuxtApp => {
     defaults,
     icons,
     theme: optionTheme,
+
+    locale: {
+      locale: 'es',
+      fallback: 'en',
+      messages: { es, en },
+    },
 
   })
 
