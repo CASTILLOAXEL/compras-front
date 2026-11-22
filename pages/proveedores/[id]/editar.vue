@@ -3,7 +3,7 @@ import type { FormularioProveedor, Proveedor } from '@/types/proveedor'
 
 useHead({ title: 'Editar proveedor' })
 
-const ruta = useRoute()
+const ruta = useRoute('proveedores-id-editar')
 const proveedorId = Number(ruta.params.id)
 
 const { obtener, actualizar } = useClienteApi()
